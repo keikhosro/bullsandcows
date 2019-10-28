@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Threading.Tasks;
 
 namespace BullsAndCows
@@ -10,7 +9,6 @@ namespace BullsAndCows
         {
             if (obj == null || obj.Possibilities == null) return;
 
-            obj.Count++;
             if (obj.Possibilities.Count == 0)
             {
                 obj = GameHelper.GetNewGameObject();
@@ -19,7 +17,7 @@ namespace BullsAndCows
             }
 
             obj.Guess = obj.Possibilities[0];
-            await Clients.Caller.SendAsync("ReceiveMessage", obj, $"Attempt #{obj.Count}. My guess: {obj.Guess}");
+            await Clients.Caller.SendAsync("ReceiveMessage", obj, $"Attempt #{obj.Count + 1}. My guess: {obj.Guess}");
             await Clients.Caller.SendAsync("ReceiveMessage", obj, "Enter the number of bulls and cows as a two-digit number: ");
         }
 
@@ -27,15 +25,16 @@ namespace BullsAndCows
         {
             if (obj == null || obj.Possibilities == null) return;
 
-            if (string.IsNullOrEmpty(answer) || answer.Length < 2)
+            if (string.IsNullOrEmpty(answer)
+                || answer.Length < 2
+                || !int.TryParse(answer[0].ToString(), out int bulls)
+                || !int.TryParse(answer[1].ToString(), out int cows))
             {
-                await Clients.Caller.SendAsync("ReceiveMessage", obj, $"Invalid response!");
-                await Clients.Caller.SendAsync("ReceiveMessage", obj, "Enter the number of bulls and cows as a two-digit number: ");
+                await Clients.Caller.SendAsync("ReceiveMessage", obj, "Invalid response!");
                 return;
             }
 
-            var bulls = Convert.ToInt32($"{answer[0]}");
-            var cows = Convert.ToInt32($"{answer[1]}");
+            obj.Count++;
 
             if (bulls == 4)
             {
