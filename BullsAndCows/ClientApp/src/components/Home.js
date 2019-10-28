@@ -13,7 +13,7 @@ export class Home extends Component {
 
     this.term = new Terminal();
     this.term.open(this.terminalDiv);
-    this.term.write("Welcome to a game of Bulls & Cows!");
+    this.term.write("$ Welcome to a game of Bulls & Cows!");
 
     this.connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 
