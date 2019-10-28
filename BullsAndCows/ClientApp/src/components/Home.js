@@ -22,6 +22,7 @@ export class Home extends Component {
       if (message) {
         prompt(this.term);
         this.term.write(message);
+        this.term.focus();
       }
     });
 
