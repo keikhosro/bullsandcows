@@ -14,16 +14,15 @@ export class Home extends Component {
     this.term = new Terminal();
     this.term.open(this.terminalDiv);
     this.term.write("Welcome to a game of Bulls & Cows!");
-    prompt(this.term);
 
     this.connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 
     this.connection.on("ReceiveMessage", (gameObj, message) => {
       this.setState({ gameObj });
       if (message) {
+        prompt(this.term);
         this.term.write(message);
       }
-      prompt(this.term);
     });
 
     this.connection.start()
