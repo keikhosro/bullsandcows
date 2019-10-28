@@ -38,8 +38,8 @@ namespace BullsAndCows
 
             if (bulls == 4)
             {
-                obj = GameHelper.GetNewGameObject();
                 await Clients.Caller.SendAsync("ReceiveMessage", obj, $"Your number is: {obj.Guess}");
+                obj = GameHelper.GetNewGameObject();
                 await Clients.Caller.SendAsync("ReceiveMessage", obj, "Lets play again!");
                 return;
             }
